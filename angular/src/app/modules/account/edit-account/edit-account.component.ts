@@ -143,6 +143,13 @@ export class EditAccountComponent implements OnInit {
   }
 
   onSubmit(){
+    if(this.isNullOrWhitespace(this.data.name)||this.isNullOrWhitespace(this.data.address.street)||
+      this.isNullOrWhitespace(this.data.address.city)||this.isNullOrWhitespace(this.data.address.stateProvince)||
+      this.isNullOrWhitespace(this.data.address.postalCode)||this.isNullOrWhitespace(this.data.address.country)||
+      this.data.payments.length<=0||this.data.profiles.length<=0){
+        confirm("Please fill all the information and have at least one payment and profile before you update");
+        return console.log("there was an error");
+      }
     this.AccServ.put(this.data).subscribe(
       success=>console.log('success: ', this.data),
       error=>console.log('error'));
