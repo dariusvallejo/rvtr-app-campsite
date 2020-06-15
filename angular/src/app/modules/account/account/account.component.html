@@ -2,7 +2,7 @@
   <div class="hero-head">
     <div class="container">
       <br>
-      <h1 class="title is-2">account <a routerLink="../editaccount/{{data.id}}"><button>Edit</button></a></h1>
+      <h1 class="title is-2">account <a routerLink="../editaccount/{{data.id}}"><button class="button is-block is-pulled-right">Edit</button></a></h1>
 
       <div class="tile is-ancestor">
         <div class="tile is-3">
@@ -132,7 +132,7 @@
             <div class="tile">
               <div class="tile is-parent">
                 <div class="tile box is-child">
-                  <h2 class="title is-4">bookings</h2>
+                  <h2 class="title is-4">bookings <button class="button is-pulled-right">View All Bookings</button></h2>
 
                   <div class="level" *ngFor="let x of bookings; let indexOfelement=index;">
                     <div class="level-item">

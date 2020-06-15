@@ -18,13 +18,13 @@
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">street</p>
-                        <input class="title has-text-dark is-6" [(ngModel)]="data.address.street" name="street">
+                        <input class="has-text-dark is-6" [(ngModel)]="data.address.street" name="street">
                       </div>
                     </div>
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">apt / unit</p>
-                        <input class="title has-text-dark is-6" [(ngModel)]="data.address.unit" name="unit">
+                        <input class="has-text-dark is-6" [(ngModel)]="data.address.unit" name="unit">
                       </div>
                     </div>
                   </div>
@@ -34,19 +34,19 @@
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">city</p>
-                        <input class="title has-text-dark is-6" [(ngModel)]="data.address.city" name="city">
+                        <input class="has-text-dark is-6" [(ngModel)]="data.address.city" name="city">
                       </div>
                     </div>
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">state</p>
-                        <input class="title has-text-dark is-6" [(ngModel)]="data.address.stateProvince" name="state">
+                        <input class="has-text-dark is-6" [(ngModel)]="data.address.stateProvince" name="state">
                       </div>
                     </div>
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">Postal Code</p>
-                        <input class="title has-text-dark is-6" [(ngModel)]="data.address.postalCode" name="zip">
+                        <input class="has-text-dark is-6 tile" [(ngModel)]="data.address.postalCode" name="zip">
                       </div>
                     </div>
                   </div>
@@ -56,36 +56,35 @@
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">country</p>
-                        <input class="title has-text-dark is-6" [(ngModel)]="data.address.country" name="country">
+                        <input class="has-text-dark is-6" [(ngModel)]="data.address.country" name="country">
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="tile box has-background-dark is-child">
-                <h2 class="title has-text-light is-4">payments</h2>
-                <div class="level-left">
+                <h2 class="title has-text-light is-4">payments <button class="button is-small" (click)="toggleCard()" type="button">Add</button></h2>
+                <div *ngIf="!hideCard" [@slideInOut] class="level-left">
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">bank</p>
-                        <input #cardName type="string" class="title has-text-dark is-6"/>
+                        <input placeholder="visa/master/amex..." #cardName type="string" class="has-text-dark is-5"/>
                       </div>
                     </div>
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">number</p>
-                        <input type="number" #cardNumber class="title has-text-dark is-6"/>
+                        <input placeholder="15 digit card #" type="number" #cardNumber class="has-text-dark is-6"/>
                       </div>
                     </div>
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">expiry</p>
-                        <input type="date" #cardExpi class="title has-text-dark is-6"/>
-                        <button type="button" (click)="addCard(cardName.value, cardNumber.value, cardExpi.value)">Add</button>
+                        <input type="date" #cardExpi class="has-text-dark is-6"/>
+                        &nbsp;<button type="button" class="button is-small" style="height: 27px;" (click)="addCard(cardName.value, cardNumber.value, cardExpi.value);">Add</button>
                       </div>
                     </div>
                   </div>
-
                 <div class="level" *ngFor="let x of data.payments">
                   <div class="level-left">
                     <div class="level-item has-text-light">
@@ -103,9 +102,13 @@
                     <div class="level-item has-text-light">
                       <div>
                         <p class="heading">expiry</p>
-                        <p class="title has-text-light is-6">{{x.cardExpirationDate | date:'shortDate'}} 
-                            <button type="button" (click)="removeCard(x)">Remove</button></p>
+                        <p class="title has-text-light is-6">{{x.cardExpirationDate | date:'shortDate'}} </p>
                       </div>
+                    </div>
+                  </div>
+                  <div class="level-item level-right has-text-light">
+                    <div>
+                      <button type="button" class="button is-small" style="margin-top: 20px;" (click)="removeCard(x)">Remove</button>
                     </div>
                   </div>
                 </div>
@@ -116,7 +119,8 @@
             <div class="tile is-vertical">
               <div class="tile is-parent">
                 <div class="tile box is-child">
-                  <h2 class="title is-4">profiles</h2>
+                  <h2 class="title is-4">profiles <button class="button is-small" (click)="toggleProfile()" type="button">Add</button></h2>
+                  <div *ngIf="!hideProfile" [@slideInOut]>
                   <form>
                     <div class="form-group">
                         <fieldset class="form-group">
@@ -143,7 +147,7 @@
                             </div>
                         </fieldset>
                     </div>
-                    <a class="btn btn-danger" (click)="removeImage()" *ngIf="isImageSaved">Remove</a>
+                    <a class="button is-small" (click)="removeImage()" *ngIf="isImageSaved">Remove</a>
                 </form>
                   <div class="level-left">
                     <div class="level-item has-text-dark">
@@ -178,12 +182,12 @@
                       <div class="level-item has-text-dark">
                         <div>
                           <p class="heading">phone</p>
-                          <input type="number" #phoneNumber class="title has-text-dark is-6"/>
-                          <button type="button" (click)="addProfile(firstName.value,lastName.value,age.value,email.value,phoneNumber.value,cardImageBase64)">Add</button>
+                          <input placeholder="10 digit phone #" type="number" #phoneNumber class="title has-text-dark is-6"/>
+                          &nbsp;<button type="button" class="button is-small" style="height: 25px;" (click)="addProfile(firstName.value,lastName.value,age.value,email.value,phoneNumber.value,cardImageBase64)">Add</button>
                         </div>  
                     </div>
                   </div>
-                  
+                  </div>
                   <br>
 
                   <div class="level">
@@ -199,7 +203,7 @@
                             <div>
                               <p class="heading">{{x.age}}</p>
                               <p class="title is-6">{{x.name.given}} {{x.name.family}}</p>
-                              <button type="button" (click)="removeProfile(x)">Remove</button>
+                              <button class="button is-small" type="button" (click)="removeProfile(x)">Remove</button>
                             </div>
                           </div>
                         </div>
@@ -211,8 +215,8 @@
             </div>
           </div>
         </div>
-        <div class="box is-centered has-text-centered">
-            <button type="submit">Update</button>
+        <div class="is-centered has-text-centered">
+            <button class="button is-large" type="submit">Update</button>
         </div>
       </div>
       </form>

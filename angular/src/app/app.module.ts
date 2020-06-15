@@ -6,11 +6,12 @@ import { Monitoring } from './data/monitoring.model';
 import { LayoutModule } from './layout/layout.module';
 import { MonitoringService } from './services/monitoring/monitoring.service';
 import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [AppComponent],
-  imports: [AppRoutingModule, BrowserModule, LayoutModule],
+  imports: [AppRoutingModule, BrowserModule, LayoutModule, BrowserAnimationsModule],
   providers: [
     Monitoring,
     {

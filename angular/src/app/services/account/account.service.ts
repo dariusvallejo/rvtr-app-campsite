@@ -23,6 +23,10 @@ export class AccountService {
     this.apiUrl$ = config.get().pipe(map((cfg) => cfg.api.account));
   }
 
+  getUserId(){
+    return '1';
+  }
+
   getBookings(accountId?: string, limit?: number): Observable<Booking[]>{
     let books: Booking[] = [];
     let bookOne: Booking = {
@@ -136,8 +140,7 @@ export class AccountService {
             stateProvince:'Texas',
             street:'1234 testing st.',
             unit:'24'
-        }
-        ,
+        },
         name: 'John Doe',
         payments:[{
             id:'1',
@@ -176,7 +179,7 @@ export class AccountService {
             age:"Adult",
             image: null
         }]}]
-        let obvAcc = of(acc);
+        let obvAcc = of([acc.find(x=>x.id==id)]);
         return obvAcc;
   }
 

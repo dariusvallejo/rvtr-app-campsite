@@ -4,26 +4,55 @@ import { AccountService } from 'src/app/services/account/account.service';
 import { Payment } from 'src/app/data/payment.model';
 import { Profile } from 'src/app/data/profile.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { trigger, transition, animate, style } from '@angular/animations';
 import * as _ from 'lodash';
 
 @Component({
   selector: 'uic-edit-account',
   templateUrl: './edit-account.component.html',
-  styleUrls: ['./edit-account.component.scss']
+  styleUrls: ['./edit-account.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({transform: 'translateY(-100%)'}),
+        animate('200ms ease-in', style({transform: 'translateY(0%)'}))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({transform: 'translateY(-100%)'}))
+      ])
+    ])
+  ]
 })
 export class EditAccountComponent implements OnInit {
+
+  //properties
   data:Account;
   imageError: string;
   isImageSaved: boolean;
   cardImageBase64: string;
+  hideCard:boolean=true;
+  hideProfile:boolean=true;
 
+  //functions
+  //boolean toggle to show/hide the add new payment section in html
+  toggleCard(){
+    this.hideCard = !this.hideCard;
+  }
+
+  //boolean toggle to show/hide the add new profile section in html
+  toggleProfile(){
+    this.hideProfile = !this.hideProfile;
+  }
+
+  //function to check if an input field is nul/undefined/or white spaces
   isNullOrWhitespace(input:string) {
     if (typeof input === 'undefined' || input == null) return true;
     return input.replace(/\s/g, '').length < 1;
 }
-  //adds a new credit card info to the displayed list
+
+  //adds a new credit card info to the array of payments in the data:Account property
   addCard(cardName:string,cardNumberr:number,cardExpi:Date){
-    //validation to check entered card name is not empty, 15 digit number, and future expiration date
+    //validation to check entered card name is not empty, is 15 digit number, and is a future expiration date
     let today = new Date();
     if( cardNumberr.toString().length!=15 || this.isNullOrWhitespace(cardName) || 
     today>cardExpi ||this.data.payments.some(x=>x.cardNumber==cardNumberr.toString())){
@@ -36,10 +65,18 @@ export class EditAccountComponent implements OnInit {
       cardNumber:cardNumberr.toString()
     }
     this.data.payments.push(newCard);
-    console.log('Successfully added to the list')
-  }
-  }
+    this.toggleCard();
+    console.log('Successfully added to the list');
+  }}
 
+  //remove a payment card from arrays of payments in the data:Account property
+  removeCard(card){
+    
+    this.data.payments
+    .splice(this.data.payments.indexOf(card),1);
+  }
+  
+  //For transferring uploaded image to base64
   fileChangeEvent(fileInput: any) {
     this.imageError = null;
     if (fileInput.target.files && fileInput.target.files[0]) {
@@ -70,7 +107,6 @@ export class EditAccountComponent implements OnInit {
 
                 console.log(img_height, img_width);
 
-
                 if (img_height > max_height && img_width > max_width) {
                     this.imageError =
                         'Maximum dimentions allowed ' +
@@ -87,23 +123,19 @@ export class EditAccountComponent implements OnInit {
                 }
             };
         };
-
         reader.readAsDataURL(fileInput.target.files[0]);
     }
   }
 
+  //removing a selected image from the add new profile section
   removeImage() {
     this.cardImageBase64 = null;
     this.isImageSaved = false;
   }
 
-  removeCard(card){
-    this.data.payments
-    .splice(this.data.payments.indexOf(card),1);
-  }
-
+  //adds a new profile to the array of profiles in the data:Account property
   addProfile(firstName:string,lastName:string,age:"Adult"|"Child",email:string,phone:number,img: string){
-    //validation for adding new profile
+    //validation for adding a new profile
     if(this.data.profiles.some(x=>x.name.given==firstName&&x.name.family==lastName) || 
     this.isNullOrWhitespace(firstName) || this.isNullOrWhitespace(lastName) || 
     this.isNullOrWhitespace(email) || phone.toString().length!=10){
@@ -122,26 +154,22 @@ export class EditAccountComponent implements OnInit {
       image: img
     }
     this.data.profiles.push(newProfile);
+    this.toggleProfile();
   }
 
-
+  //remove a profile from array of profiles in the data:Account property
   removeProfile(profile){
     this.data.profiles
     .splice(this.data.profiles.indexOf(profile),1);
   }
-
-  obscure(){
-    for(let i = 0; i < this.data.payments.length; i++){
-      this.data.payments[i].cardNumber = "***********"+ this.data.payments[i].cardNumber.substring(11,16);
-    }
-  }
   
-  //directed from the view account page with unique id
+  //http get from account service to obtain all the information of an account based on account id
   get(){
     const x = +this.route.snapshot.paramMap.get('id');
     this.AccServ.get(x.toString()).subscribe(data => this.data = data[0]);
   }
 
+  //http put from account service to update account information, validation is very ugly
   onSubmit(){
     if(this.isNullOrWhitespace(this.data.name)||this.isNullOrWhitespace(this.data.address.street)||
       this.isNullOrWhitespace(this.data.address.city)||this.isNullOrWhitespace(this.data.address.stateProvince)||

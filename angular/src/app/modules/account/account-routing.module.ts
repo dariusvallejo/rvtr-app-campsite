@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account/account.component';
-import { CommonModule } from '@Angular/common';
 import { EditAccountComponent } from './edit-account/edit-account.component';
+
 
 const routes: Routes = [
   { component: AccountComponent, path: ':id' },
@@ -10,8 +10,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AccountComponent],
+  declarations: [],
   exports: [RouterModule],
-  imports: [RouterModule.forChild(routes), CommonModule],
+  imports: [RouterModule.forChild(routes)],
 })
 export class AccountRoutingModule {}
