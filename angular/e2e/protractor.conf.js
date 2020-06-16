@@ -16,7 +16,7 @@ exports.config = {
     },
   },
   chromeDriver:
-    '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_80.0.3987.106',
+    '../node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_80.0.3987.106.exe',
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',

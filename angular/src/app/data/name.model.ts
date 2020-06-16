@@ -8,7 +8,7 @@
  * ```
  */
 export interface Name {
-  id: string;
+  id: number;
   family: string;
   given: string;
 }

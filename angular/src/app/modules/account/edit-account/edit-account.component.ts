@@ -26,12 +26,22 @@ import * as _ from 'lodash';
 export class EditAccountComponent implements OnInit {
 
   //properties
-  data:Account;
+  data:Account={
+    id:null,
+    address: null,
+    name:null,
+    payments:[],
+    profiles:[]
+  };
   imageError: string;
   isImageSaved: boolean;
   cardImageBase64: string;
   hideCard:boolean=true;
   hideProfile:boolean=true;
+  paymentsDb:Payment[];
+  profilesDb:Profile[];
+  removePaymentsDb:number[]=[];
+  removeProfilesDb:number[]=[];
 
   //functions
   //boolean toggle to show/hide the add new payment section in html
@@ -59,7 +69,7 @@ export class EditAccountComponent implements OnInit {
       return console.log('Error, please try again');
     }else{
     let newCard:Payment = {
-      id:null,
+      id:0,
       cardExpirationDate:cardExpi,
       cardName:cardName,
       cardNumber:cardNumberr.toString()
@@ -71,14 +81,19 @@ export class EditAccountComponent implements OnInit {
 
   //remove a payment card from arrays of payments in the data:Account property
   removeCard(card){
-    
+    if(this.paymentsDb.find(x=>x.cardNumber==card.cardNumber)){
+      this.removePaymentsDb.push(card.id);
+      console.log(this.removePaymentsDb)
+    }
     this.data.payments
     .splice(this.data.payments.indexOf(card),1);
   }
   
   //For transferring uploaded image to base64
+  
   fileChangeEvent(fileInput: any) {
     this.imageError = null;
+    /* istanbul ignore next */
     if (fileInput.target.files && fileInput.target.files[0]) {
         // Size Filter Bytes
         const max_size = 20971520;
@@ -142,12 +157,12 @@ export class EditAccountComponent implements OnInit {
       return console.log('Error, please try again');      
     }
     let newProfile:Profile = {
-      id:null,
+      id:0,
       email:email,
       phone:phone.toString(),
       age:age,
       name:{
-        id:null,
+        id:0,
         family:lastName,
         given:firstName
       },
@@ -159,6 +174,11 @@ export class EditAccountComponent implements OnInit {
 
   //remove a profile from array of profiles in the data:Account property
   removeProfile(profile){
+    if(this.profilesDb.find(x=>x.id==profile.id)){
+      this.removeProfilesDb.push(profile.id);
+      console.log(this.profilesDb);
+    }
+    this.removeProfilesDb.push(profile);
     this.data.profiles
     .splice(this.data.profiles.indexOf(profile),1);
   }
@@ -166,7 +186,11 @@ export class EditAccountComponent implements OnInit {
   //http get from account service to obtain all the information of an account based on account id
   get(){
     const x = +this.route.snapshot.paramMap.get('id');
-    this.AccServ.get(x.toString()).subscribe(data => this.data = data[0]);
+    this.AccServ.get(x.toString()).subscribe(data => {
+      this.data = data[0];
+      this.paymentsDb=data[0].payments;
+      this.profilesDb=data[0].profiles;
+    });
   }
 
   //http put from account service to update account information, validation is very ugly
@@ -178,7 +202,16 @@ export class EditAccountComponent implements OnInit {
         confirm("Please fill all the information and have at least one payment and profile before you update");
         return console.log("there was an error");
       }
-    this.AccServ.put(this.data).subscribe(
+      
+      this.AccServ.deleteProf(this.removeProfilesDb).subscribe(
+        success=>console.log('success: ', this.removeProfilesDb),
+        error=>console.log('error'));  
+        
+      this.AccServ.deletePay(this.removePaymentsDb).subscribe(
+        success=>console.log('success: ', this.removePaymentsDb),
+        error=>console.log('error'));  
+    
+      this.AccServ.put(this.data).subscribe(
       success=>console.log('success: ', this.data),
       error=>console.log('error'));
       confirm("Account updated!");

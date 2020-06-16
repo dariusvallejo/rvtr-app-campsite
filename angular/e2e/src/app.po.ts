@@ -2,7 +2,11 @@ import { browser, by, element } from 'protractor';
 
 export class AppPage {
   navigateTo(): Promise<unknown> {
-    return browser.get(browser.baseUrl) as Promise<unknown>;
+    return browser.get('/') as Promise<unknown>;
+  }
+
+  navigateToAccount(): Promise<unknown> {
+    return browser.get('/account/1') as Promise<unknown>;
   }
 
   getPageFooter(): Promise<string> {
@@ -12,4 +16,5 @@ export class AppPage {
   getPageHeader(): Promise<string> {
     return element(by.css('uic-header')).getText() as Promise<string>;
   }
+
 }

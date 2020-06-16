@@ -23,7 +23,7 @@ describe('project rvtr-app-campsite', () => {
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
     expect(logs).not.toContain(
       jasmine.objectContaining({
-        level: logging.Level.SEVERE,
+        level: logging.Level.INFO,
       } as logging.Entry)
     );
   });

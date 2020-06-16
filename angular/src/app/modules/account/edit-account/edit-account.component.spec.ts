@@ -18,6 +18,9 @@ describe('EditAccountComponent', () => {
 
   let mockAccount: Account[];
 
+  let reader: FileReader;
+  let file;
+
   const activatedRouteStub = {
     snapshot: {
       paramMap: {
@@ -30,8 +33,6 @@ describe('EditAccountComponent', () => {
 
   beforeEach(async(() => {
     mockAccountService = jasmine.createSpyObj(['get', 'put']);
-    //mockRouter = jasmine.createSpyObj(['navigateByUrl']);
-
 
     TestBed.configureTestingModule({
       declarations: [EditAccountComponent],
@@ -46,6 +47,9 @@ describe('EditAccountComponent', () => {
   }));
 
   beforeEach(() => {
+    reader = new FileReader();
+    file = new File([],'', );
+
     mockAccount = [{
       id: '1',
       address: {
@@ -206,10 +210,6 @@ describe('EditAccountComponent', () => {
       expect(component.data.payments.length).toBe(1);
       expect(component.data.payments[0]).toBe(mockAccount[0].payments[0]);
     });
-  });
-
-  describe ('fileChangeEvent', () =>{
-    
   });
 
   describe('addProfile', () => {

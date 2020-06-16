@@ -33,6 +33,7 @@ export class AccountComponent implements OnInit {
       .subscribe(lodge=>this.bookingLocations.push(lodge[0].name));
     }
   }
+  console.log(this.bookingLocations);
   }
 
   //http get to call the most recent reviews by the account from the review service. using account id.
@@ -45,6 +46,7 @@ export class AccountComponent implements OnInit {
       .subscribe(lodge=>this.reviewLocations.push(lodge[0].name));
     }
   }
+  console.log(this.reviewLocations);
   }
 
   //http get to retrieve account information from account service using account id
@@ -52,8 +54,7 @@ export class AccountComponent implements OnInit {
     let x=this.AccSer.getUserId();
     console.log(x);
     //const x = +this.route.snapshot.paramMap.get('id');
-    this.AccSer.get(x).subscribe(data => this.data = data[0]);
-    this.obscure();
+    this.AccSer.get(x).subscribe(data => {this.data = data[0];this.obscure();this.dummyGetReviews();this.getBookings(); console.log(this.data)});
   }
 
   //hashing the credit card number displayed.
@@ -70,8 +71,8 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.dummyGet();
-    this.dummyGetReviews();
-    this.getBookings();
+    
+
   }
 
 }
